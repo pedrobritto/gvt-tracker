@@ -1,16 +1,40 @@
+const REPS_STORAGE_KEY = "reps";
+const STOPWATCH_STORAGE_KEY = "stopwatch";
+
 class RepsTracker {
   constructor({ countEl, targetCountEl, addCountEl, resetCountEl }) {
+    /**
+     * @type {HTMLDivElement}
+     */
     this.countEl = countEl;
+    /**
+     * @type {HTMLDivElement}
+     */
     this.targetCountEl = targetCountEl;
+    /**
+     * @type {HTMLButtonElement}
+     */
     this.addCountEl = addCountEl;
+    /**
+     * @type {HTMLButtonElement}
+     */
     this.resetCountEl = resetCountEl;
 
+    /**
+     * @type {number}
+     */
     this.repCount = 0;
+
+    /**
+     * @type {number}
+     */
     this.targetRepCount = 10;
   }
 
   updateDOM() {
     this.countEl.textContent = String(this.repCount).padStart(2, "0");
+
+    localStorage.setItem(REPS_STORAGE_KEY, JSON.stringify(this.repCount));
   }
 
   addRep() {
@@ -24,6 +48,11 @@ class RepsTracker {
   }
 
   init() {
+    const repFromStorage = localStorage.getItem(REPS_STORAGE_KEY);
+    const parsedReps = repFromStorage ? JSON.parse(repFromStorage) : 0;
+
+    this.repCount = parsedReps;
+
     if (this.addCountEl) {
       this.addCountEl.addEventListener("click", () => {
         this.addRep();
@@ -37,18 +66,38 @@ class RepsTracker {
         this.updateDOM();
       });
     }
+
+    this.updateDOM();
   }
 }
 
 class Stopwatch {
   constructor({ minutesEl, secondsEl, startButton, resetButton }) {
+    /**
+     * @type {number}
+     */
     this.elapsedTime = 0;
+    /**
+     * @type {number}
+     */
     this.targetTime = 0;
 
+    /**
+     * @type {boolean}
+     */
     this.isRunning = false;
+    /**
+     * @type {number | undefined}
+     */
     this.intervalRef;
 
+    /**
+     * @type {HTMLSpanElement}
+     */
     this.minutesEl = minutesEl;
+    /**
+     * @type {HTMLSpanElement}
+     */
     this.secondsEl = secondsEl;
     /**
      * @type {HTMLButtonElement}
@@ -96,6 +145,7 @@ class Stopwatch {
 
     this.updateDOM();
 
+    // To save the elapsed time in the storage, I need to save a starting time instead of incrementing on the fly.
     this.intervalRef = setInterval(() => {
       this.elapsedTime += 1000;
 

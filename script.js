@@ -1,46 +1,64 @@
-function repCountTracker() {
-  const repCount = document.querySelector(".rep-tracker-count");
-  const repTarget = document.querySelector(".rep-tracker-target");
+class RepsTracker {
+  constructor({ countEl, targetCountEl, addCountEl, resetCountEl }) {
+    this.countEl = countEl;
+    this.targetCountEl = targetCountEl;
+    this.addCountEl = addCountEl;
+    this.resetCountEl = resetCountEl;
 
-  if (!repTarget || !repCount) {
-    return;
+    this.repCount = 0;
+    this.targetRepCount = 10;
   }
 
-  const repTargetValue = parseInt(repTarget.textContent);
+  updateDOM() {
+    this.countEl.textContent = String(this.repCount).padStart(2, "0");
+  }
 
-  const addRep = () => {
-    const currentRepCount = parseInt(repCount.textContent);
-
-    if (currentRepCount < repTargetValue) {
-      repCount.textContent = currentRepCount + 1;
+  addRep() {
+    if (this.repCount < this.targetRepCount) {
+      this.repCount += 1;
     }
-  };
+  }
 
-  const button = document.querySelector(".button");
+  resetReps() {
+    this.repCount = 0;
+  }
 
-  if (button) {
-    button.addEventListener("click", addRep);
+  init() {
+    if (this.addCountEl) {
+      this.addCountEl.addEventListener("click", () => {
+        this.addRep();
+        this.updateDOM();
+      });
+    }
+
+    if (this.resetCountEl) {
+      this.resetCountEl.addEventListener("click", () => {
+        this.resetReps();
+        this.updateDOM();
+      });
+    }
   }
 }
 
 class Stopwatch {
-  constructor({ minutesDOMEl, secondsDOMEl, startButton, resetButton }) {
+  constructor({ minutesEl, secondsEl, startButton, resetButton }) {
     this.elapsedTime = 0;
     this.targetTime = 0;
 
     this.isRunning = false;
     this.intervalRef;
 
-    this.minutesEl = minutesDOMEl;
-    this.secondsEl = secondsDOMEl;
+    this.minutesEl = minutesEl;
+    this.secondsEl = secondsEl;
+    /**
+     * @type {HTMLButtonElement}
+     */
     this.startButton = startButton;
+    /**
+     * @type {HTMLButtonElement}
+     */
     this.resetButton = resetButton;
   }
-
-  // iterate in increments of 100ms or 1000ms (setinterval)
-  // add to elapsed time.
-  // grab minutes and seconds in each iteration.
-  // update DOM.
 
   updateDOM() {
     const timeInSeconds = Math.floor(this.elapsedTime / 1000);
@@ -49,22 +67,25 @@ class Stopwatch {
     const timeInSecondsWithModulo = timeInSeconds % 60;
 
     if (this.minutesEl) {
-      this.minutesEl.textContent =
-        timeInMinutes < 10 ? `0${timeInMinutes}` : timeInMinutes;
+      this.minutesEl.textContent = String(timeInMinutes).padStart(2, "0");
     }
 
     if (this.secondsEl) {
-      this.secondsEl.textContent =
-        timeInSecondsWithModulo < 10
-          ? `0${timeInSecondsWithModulo}`
-          : timeInSecondsWithModulo;
+      this.secondsEl.textContent = String(timeInSecondsWithModulo).padStart(
+        2,
+        "0"
+      );
     }
 
     if (this.startButton) {
       if (this.isRunning) {
         this.startButton.textContent = "Stop";
+        this.startButton.classList.add("is-running");
+        this.startButton.classList.remove("is-stopped");
       } else {
         this.startButton.textContent = "Start";
+        this.startButton.classList.remove("is-running");
+        this.startButton.classList.add("is-stopped");
       }
     }
   }
@@ -85,6 +106,8 @@ class Stopwatch {
   stop() {
     this.isRunning = false;
 
+    this.updateDOM();
+
     clearInterval(this.intervalRef);
   }
 
@@ -95,6 +118,8 @@ class Stopwatch {
   }
 
   init() {
+    this.updateDOM();
+
     this.startButton?.addEventListener("click", () => {
       if (this.isRunning) {
         this.stop();
@@ -110,21 +135,23 @@ class Stopwatch {
 }
 
 function main() {
-  repCountTracker();
-
-  const minutesDOMEl = document.getElementById("timer-minutes");
-  const secondsDOMEl = document.getElementById("timer-seconds");
-  const startButton = document.getElementById("timer-start");
-  const resetButton = document.getElementById("timer-reset");
-
   const stopwatch = new Stopwatch({
-    minutesDOMEl,
-    secondsDOMEl,
-    startButton,
-    resetButton,
+    minutesEl: document.getElementById("timer-minutes"),
+    secondsEl: document.getElementById("timer-seconds"),
+    startButton: document.getElementById("timer-start"),
+    resetButton: document.getElementById("timer-reset"),
   });
 
   stopwatch.init();
+
+  const repsTracker = new RepsTracker({
+    countEl: document.getElementById("reps-count"),
+    targetCountEl: document.getElementById("reps-target"),
+    addCountEl: document.getElementById("reps-add"),
+    resetCountEl: document.getElementById("reps-reset"),
+  });
+
+  repsTracker.init();
 }
 
 main();

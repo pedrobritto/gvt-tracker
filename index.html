@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GVT Tracker</title>
+    <link rel="stylesheet" href="./lib/normalize.css" />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <main class="main">
+      <h1>GVT Tracker</h1>
+
+      <section>
+        <h2>Rep count</h2>
+
+        <div class="generic-container">
+          <div class="rep-tracker">
+            <div class="rep-tracker__item rep-tracker-count">0</div>
+            <div class="rep-tracker__item rep-tracker-separator">/</div>
+            <div class="rep-tracker__item rep-tracker-target">10</div>
+          </div>
+
+          <button class="button">Add rep</button>
+          <button class="button--link">Reset reps</button>
+        </div>
+      </section>
+
+      <section>
+        <h2>Rest timer</h2>
+
+        <div class="generic-container">
+          <div class="rep-tracker">
+            <span class="rep-tracker__item" id="timer-minutes">00</span>
+            <span class="rep-tracker__item">:</span>
+            <span class="rep-tracker__item" id="timer-seconds">00</span>
+          </div>
+
+          <div class="button-group">
+            <button id="timer-start" class="button">Start</button>
+            <button id="timer-reset" class="button">Reset</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

@@ -141,7 +141,7 @@ class Stopwatch {
   }
 
   updateDOM() {
-    const timeInMilliseconds = Math.floor(this.elapsedTime % 100);
+    const timeInMilliseconds = Math.floor((this.elapsedTime / 10) % 100);
     const timeInSeconds = Math.floor(this.elapsedTime / 1000);
     const timeInMinutes = Math.floor(timeInSeconds / 60);
 
@@ -176,10 +176,10 @@ class Stopwatch {
 
     // To save the elapsed time in the storage, I need to save a starting time instead of incrementing on the fly.
     this.intervalRef = setInterval(() => {
-      this.elapsedTime += 123;
+      this.elapsedTime += 83;
 
       this.updateDOM();
-    }, 123);
+    }, 83);
   }
 
   stop() {

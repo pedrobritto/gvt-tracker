@@ -29,6 +29,16 @@ class RepsTracker {
      * @type {number}
      */
     this.targetRepCount = 10;
+
+    /**
+     * @type {number}
+     */
+    this.temporaryDisableTime = 5000;
+
+    /**
+     * @type {number | undefined}
+     */
+    this.timeoutRef;
   }
 
   updateDOM() {
@@ -41,6 +51,12 @@ class RepsTracker {
     if (this.repCount < this.targetRepCount) {
       this.repCount += 1;
     }
+
+    this.addCountEl.disabled = true;
+
+    setTimeout(() => {
+      this.addCountEl.disabled = false;
+    }, this.temporaryDisableTime);
   }
 
   resetReps() {
@@ -72,7 +88,14 @@ class RepsTracker {
 }
 
 class Stopwatch {
-  constructor({ minutesEl, secondsEl, startButton, resetButton }) {
+  constructor({
+    minutesEl,
+    secondsEl,
+    millisecondsEl,
+    startButton,
+    resetButton,
+    resetOnStart,
+  }) {
     /**
      * @type {number}
      */
@@ -100,6 +123,10 @@ class Stopwatch {
      */
     this.secondsEl = secondsEl;
     /**
+     * @type {HTMLSpanElement}
+     */
+    this.millisecondsEl = millisecondsEl;
+    /**
      * @type {HTMLButtonElement}
      */
     this.startButton = startButton;
@@ -107,9 +134,14 @@ class Stopwatch {
      * @type {HTMLButtonElement}
      */
     this.resetButton = resetButton;
+    /**
+     * @type {boolean}
+     */
+    this.resetOnStart = resetOnStart;
   }
 
   updateDOM() {
+    const timeInMilliseconds = Math.floor(this.elapsedTime % 100);
     const timeInSeconds = Math.floor(this.elapsedTime / 1000);
     const timeInMinutes = Math.floor(timeInSeconds / 60);
 
@@ -126,16 +158,13 @@ class Stopwatch {
       );
     }
 
-    if (this.startButton) {
-      if (this.isRunning) {
-        this.startButton.textContent = "Stop";
-        this.startButton.classList.add("is-running");
-        this.startButton.classList.remove("is-stopped");
-      } else {
-        this.startButton.textContent = "Start";
-        this.startButton.classList.remove("is-running");
-        this.startButton.classList.add("is-stopped");
-      }
+    console.log(`this.millisecondsEl`, this.millisecondsEl);
+
+    if (this.millisecondsEl) {
+      this.millisecondsEl.textContent = String(timeInMilliseconds).padStart(
+        2,
+        "0"
+      );
     }
   }
 
@@ -147,10 +176,10 @@ class Stopwatch {
 
     // To save the elapsed time in the storage, I need to save a starting time instead of incrementing on the fly.
     this.intervalRef = setInterval(() => {
-      this.elapsedTime += 1000;
+      this.elapsedTime += 123;
 
       this.updateDOM();
-    }, 1000);
+    }, 123);
   }
 
   stop() {
@@ -171,10 +200,11 @@ class Stopwatch {
     this.updateDOM();
 
     this.startButton?.addEventListener("click", () => {
-      if (this.isRunning) {
-        this.stop();
-      } else {
+      if (this.resetOnStart) {
+        this.reset();
         this.start();
+
+        return;
       }
     });
 
@@ -188,8 +218,10 @@ function main() {
   const stopwatch = new Stopwatch({
     minutesEl: document.getElementById("timer-minutes"),
     secondsEl: document.getElementById("timer-seconds"),
-    startButton: document.getElementById("timer-start"),
-    resetButton: document.getElementById("timer-reset"),
+    millisecondsEl: document.getElementById("timer-milliseconds"),
+    startButton: document.getElementById("reps-add"),
+    resetButton: document.getElementById("reps-reset"),
+    resetOnStart: true,
   });
 
   stopwatch.init();

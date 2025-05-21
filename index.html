@@ -22,7 +22,9 @@
 
     <main class="main">
       <section class="generic-section">
-        <h2>Rep count</h2>
+        <header class="section-header">
+          <h2>Rep count</h2>
+        </header>
 
         <div class="generic-container">
           <div class="info-container">
@@ -37,18 +39,20 @@
       </section>
 
       <section class="generic-section">
-        <h2>Rest time</h2>
+        <header class="section-header">
+          <h2>Rest time</h2>
+          <div class="subtitle">
+            The time will start when you add a new rep.
+          </div>
+        </header>
 
         <div class="generic-container">
-          <div class="info-container">
+          <div class="info-container" style="gap: 0.5rem">
             <span class="info-item" id="timer-minutes">00</span>
             <span class="info-item info-item__separator">:</span>
             <span class="info-item" id="timer-seconds">00</span>
-          </div>
-
-          <div class="button-group">
-            <button id="timer-start" class="button">Start</button>
-            <button id="timer-reset" class="button timer-reset">Reset</button>
+            <span class="info-item info-item__separator">.</span>
+            <span class="info-item" id="timer-milliseconds">00</span>
           </div>
         </div>
       </section>

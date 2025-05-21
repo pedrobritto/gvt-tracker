@@ -15,15 +15,30 @@ button {
   cursor: pointer;
 }
 
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 h1 {
   margin: 0;
   text-align: center;
 }
 
 h2 {
-  margin-top: 0;
+  margin: 0;
   font-weight: normal;
   text-align: center;
+}
+
+.section-header {
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  text-align: center;
+  margin-top: 0.5rem;
+  color: #444;
 }
 
 .nav-bar {
@@ -105,7 +120,7 @@ h2 {
 }
 
 .button.add-rep {
-  background-color: #dbeafe;
+  background-color: #93c5fd;
 }
 
 .button--link {

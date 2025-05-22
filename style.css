@@ -16,7 +16,7 @@ button {
 }
 
 button:disabled {
-  opacity: 0.5;
+  opacity: 0.5 !important;
   cursor: not-allowed;
 }
 
@@ -120,7 +120,8 @@ h2 {
 }
 
 .button.add-rep {
-  background-color: #93c5fd;
+  background-color: #3b82f6;
+  color: white;
 }
 
 .button--link {

@@ -6,7 +6,12 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "minify:css": "minify style.css > dist/style.css && minify lib/normalize.css > dist/lib/normalize.css",
+    "minify:js": "minify script.js > dist/script.js",
+    "minify:html": "minify index.html > dist/index.html",
+    "prebuild": "mkdir -p dist && mkdir -p dist/lib",
+    "build": "npm run minify:css && npm run minify:js && npm run minify:html"
   },
   "repository": {
     "type": "git",
